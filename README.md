@@ -5,11 +5,11 @@ Official JavaScript/TypeScript SDK for the [Flaresend](https://flaresend.com) Wh
 ## Installation
 
 ```bash
-npm install @flaresend/sdk
+npm install flaresend
 # or
-yarn add @flaresend/sdk
+yarn add flaresend
 # or
-pnpm add @flaresend/sdk
+pnpm add flaresend
 ```
 
 ## Features
@@ -22,7 +22,7 @@ pnpm add @flaresend/sdk
 ## Quick Start
 
 ```typescript
-import { Flaresend } from "@flaresend/sdk";
+import { Flaresend } from "flaresend";
 
 const flaresend = new Flaresend("YOUR_API_KEY");
 
@@ -108,7 +108,7 @@ await flaresend.groups.sendMessage({
 The SDK provides custom error classes for better error handling:
 
 ```typescript
-import { Flaresend, AuthenticationError, InstanceNotReadyError } from '@flaresend/sdk';
+import { Flaresend, AuthenticationError, InstanceNotReadyError } from 'flaresend';
 
 try {
   const flaresend = new Flaresend('INVALID_KEY');
@@ -135,3 +135,7 @@ graph TD
     D --> F
     F --> G[Flaresend API]
 ```
+
+## License
+
+MIT
