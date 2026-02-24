@@ -16,7 +16,7 @@ pnpm add flaresend
 
 - **Type-safe API**: Fully typed requests and responses.
 - **Resource-based**: Intuitive organization (messages, groups, scheduled).
-- **Minimal Dependencies**: Zero runtime dependencies (uses native `fetch`).
+- **Minimal Dependencies**: Zero runtime dependencies, tree-shakable and minified + gzipped.
 - **Dual Output**: Supports both ESM and CommonJS.
 
 ## Quick Start
