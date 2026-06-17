@@ -4,6 +4,7 @@ import {
     NotFoundError,
     ValidationError,
     InstanceNotReadyError,
+    ForbiddenError,
 } from './errors';
 
 export interface HttpClientOptions {
@@ -64,6 +65,8 @@ export class HttpClient {
                 throw new AuthenticationError(message, status, data);
             case 400:
                 throw new ValidationError(message, status, data);
+            case 403:
+                throw new ForbiddenError(message, status, data);
             case 404:
                 throw new NotFoundError(message, status, data);
             case 425:
@@ -89,6 +92,14 @@ export class HttpClient {
     async patch<T>(path: string, body?: any): Promise<T> {
         const options: RequestInit = {
             method: 'PATCH',
+            body: body instanceof FormData ? body : JSON.stringify(body),
+        };
+        return this.request<T>(path, options);
+    }
+
+    async put<T>(path: string, body?: any): Promise<T> {
+        const options: RequestInit = {
+            method: 'PUT',
             body: body instanceof FormData ? body : JSON.stringify(body),
         };
         return this.request<T>(path, options);

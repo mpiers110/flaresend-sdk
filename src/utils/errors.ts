@@ -49,6 +49,14 @@ export class ValidationError extends FlaresendError {
 /**
  * Thrown when the requested resource is not found
  */
+export class ForbiddenError extends FlaresendError {
+    constructor(message: string = 'Forbidden', statusCode: number = 403, response?: any) {
+        super(message, statusCode, response);
+        this.name = 'ForbiddenError';
+        Object.setPrototypeOf(this, ForbiddenError.prototype);
+    }
+}
+
 export class NotFoundError extends FlaresendError {
     constructor(message: string = 'Resource not found', statusCode: number = 404, response?: any) {
         super(message, statusCode, response);

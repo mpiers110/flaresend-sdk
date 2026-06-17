@@ -15,7 +15,7 @@ pnpm add flaresend
 ## Features
 
 - **Type-safe API**: Fully typed requests and responses.
-- **Resource-based**: Intuitive organization (messages, groups, scheduled).
+- **Resource-based**: Intuitive organization (messages, groups, channels, scheduled).
 - **Minimal Dependencies**: Zero runtime dependencies, tree-shakable and minified + gzipped.
 - **Dual Output**: Supports both ESM and CommonJS.
 
@@ -103,6 +103,90 @@ await flaresend.groups.sendMessage({
 });
 ```
 
+### Channels
+
+#### Send a channel message
+
+```typescript
+await flaresend.channels.send("120363406469149890@newsletter", {
+  type: "text",
+  text: "Hello everyone 👋",
+});
+```
+
+#### Send a channel file upload
+
+```typescript
+await flaresend.channels.sendFile("120363406469149890@newsletter", {
+  type: "document",
+  file: myFileBlob,
+  fileName: "announcement.pdf",
+  caption: "Monthly newsletter",
+});
+```
+
+#### Get channel metadata
+
+```typescript
+const channel = await flaresend.channels.getById("120363406469149890@newsletter");
+```
+
+#### Get channel metadata by invite code
+
+```typescript
+const inviteChannel = await flaresend.channels.getByInviteCode("0029VanAL05IHphM6gyJ7h02");
+```
+
+#### Create/update/follow/unfollow a channel
+
+```typescript
+await flaresend.channels.create({
+  name: "Engineering 55",
+  description: "Product updates and team news",
+});
+
+await flaresend.channels.update("120363406469149890@newsletter", {
+  name: "Engineering Updates",
+  description: "Weekly technical announcements",
+});
+
+await flaresend.channels.follow("120363406469149890@newsletter");
+await flaresend.channels.unfollow("120363406469149890@newsletter");
+```
+
+## Webhooks
+
+Flaresend webhook delivery is configured in your Flaresend account dashboard. The SDK does not register webhook URLs for you; instead, set your webhook endpoint in the dashboard and handle incoming events in your application.
+
+#### Handle incoming webhook events
+
+```typescript
+import express from 'express';
+import { Flaresend } from 'flaresend';
+
+const app = express();
+app.use(express.json());
+
+const flaresend = new Flaresend('YOUR_API_KEY');
+
+app.post('/webhooks/flaresend', (req, res) => {
+  const event = flaresend.webhooks.parseEvent(req.body);
+
+  // Handle incoming event payload here
+  console.log('Incoming event', event);
+
+  res.status(200).json({ status: 'received' });
+});
+```
+
+#### Signature validation
+
+The current SDK includes a placeholder `validateSignature` helper for webhook signature verification. If your Flaresend webhook configuration includes a signature secret, implement the verification logic in your own application or extend the resource once Flaresend publishes the exact HMAC details.
+
+```typescript
+const isValid = flaresend.webhooks.validateSignature(JSON.stringify(req.body), signatureHeader, secret);
+```
+
 ## Error Handling
 
 The SDK provides custom error classes for better error handling:
@@ -129,10 +213,12 @@ graph TD
     A[Flaresend Client] --> B[Messages Resource]
     A --> C[Groups Resource]
     A --> D[Scheduled Resource]
+    A --> H[Channels Resource]
     A --> E[Webhooks Resource]
     B --> F[HttpClient]
     C --> F
     D --> F
+    H --> F
     F --> G[Flaresend API]
 ```
 
