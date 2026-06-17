@@ -1,47 +1,37 @@
-name: Publish Release
+name: Publish Package
 
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'package.json'
-      - 'src/**'
-      - 'README.md'
-      - 'tsconfig.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/release.yml'
+      - master
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  release:
-    name: Publish npm package
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable Corepack and install pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+          package-manager-cache: false
+          auth-type: 'oidc'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
-      - name: Build package
-        run: pnpm run build
+      - name: Build
+        run: npm run build --if-present
 
-      - name: Authenticate with npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+      - name: Run tests
+        run: npm test
 
-      - name: Publish package
+      - name: Publish to npm
         run: npm publish --access public
