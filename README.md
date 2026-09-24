@@ -1,23 +1,26 @@
-# Flaresend JavaScript SDK
+# Flaresend SDK
 
-Official JavaScript/TypeScript SDK for the [Flaresend](https://flaresend.com) WhatsApp Messaging API.
+An unofficial, type-safe JavaScript/TypeScript SDK for the Flaresend WhatsApp Messaging API.
 
 ## Installation
 
 ```bash
 npm install flaresend
+
 # or
 yarn add flaresend
+
 # or
 pnpm add flaresend
 ```
 
 ## Features
 
-- **Type-safe API**: Fully typed requests and responses.
-- **Resource-based**: Intuitive organization (messages, groups, channels, scheduled).
-- **Minimal Dependencies**: Zero runtime dependencies, tree-shakable and minified + gzipped.
-- **Dual Output**: Supports both ESM and CommonJS.
+* **Type-safe API**: Fully typed requests and responses for a better developer experience.
+* **Resource-based API**: Intuitive resource organization for messages, groups, channels, and scheduled messages.
+* **Zero Runtime Dependencies**: Lightweight by design with no production dependencies.
+* **Tree-shakable**: ESM output enables modern bundlers to eliminate unused code.
+* **Dual Output**: Supports both ESM and CommonJS environments.
 
 ## Quick Start
 
@@ -57,7 +60,7 @@ await flaresend.messages.send({
 // Assuming you have a File or Blob object
 await flaresend.messages.sendFile({
   recipients: ["254712345678"],
-  type: "document",
+  type: "document", // "image" | "video" | "document" | "audio" | "template"
   file: myFileBlob,
   fileName: "report.pdf",
 });
@@ -179,14 +182,6 @@ app.post('/webhooks/flaresend', (req, res) => {
 });
 ```
 
-#### Signature validation
-
-The current SDK includes a placeholder `validateSignature` helper for webhook signature verification. If your Flaresend webhook configuration includes a signature secret, implement the verification logic in your own application or extend the resource once Flaresend publishes the exact HMAC details.
-
-```typescript
-const isValid = flaresend.webhooks.validateSignature(JSON.stringify(req.body), signatureHeader, secret);
-```
-
 ## Error Handling
 
 The SDK provides custom error classes for better error handling:
@@ -204,22 +199,6 @@ try {
     console.error('WhatsApp instance not connected');
   }
 }
-```
-
-## Architecture
-
-```mermaid
-graph TD
-    A[Flaresend Client] --> B[Messages Resource]
-    A --> C[Groups Resource]
-    A --> D[Scheduled Resource]
-    A --> H[Channels Resource]
-    A --> E[Webhooks Resource]
-    B --> F[HttpClient]
-    C --> F
-    D --> F
-    H --> F
-    F --> G[Flaresend API]
 ```
 
 ## License

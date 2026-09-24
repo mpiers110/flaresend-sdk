@@ -1,7 +1,7 @@
 {
   "name": "flaresend",
-  "version": "1.0.2",
-  "description": "Official Flaresend JavaScript SDK for WhatsApp Messaging API",
+  "version": "1.0.3",
+  "description": "Unofficial Flaresend SDK for WhatsApp Messaging API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -23,9 +23,13 @@
   },
   "keywords": [
     "flaresend",
-    "whatsapp"
+    "whatsapp",
+    "techtafari"
   ],
-  "author": "Flaresend",
+  "author": {
+  "name": "Tech Tafari",
+  "url": "https://github.com/mpiers110"
+},
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.0.0",
